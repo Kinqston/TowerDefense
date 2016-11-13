@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Android</Platform>
+  <Config />
+  <SourceFiles>
+    <File>c:/users/kinqston/documents/visual studio 2015/Projects/TowerDefense/TowerDefense/Content/Tower.png</File>
+    <File>c:/users/kinqston/documents/visual studio 2015/Projects/TowerDefense/TowerDefense/Content/Arrow.png</File>
+  </SourceFiles>
+</SourceFileCollection>
