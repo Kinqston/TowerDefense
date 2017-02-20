@@ -23,6 +23,14 @@ namespace Arrow
         public float ArrowRotation;
         public bool isVisible;
 
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle((int)ArrowPosition.X, (int)ArrowPosition.Y, 0,0);
+            }
+        }
+
         public Arrow(Texture2D newTexture2D)
         {
             ArrowTexture = newTexture2D;

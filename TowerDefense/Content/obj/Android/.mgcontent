@@ -4,7 +4,10 @@
   <Platform>Android</Platform>
   <Config />
   <SourceFiles>
-    <File>c:/users/kinqston/documents/visual studio 2015/Projects/TowerDefense/TowerDefense/Content/Tower.png</File>
-    <File>c:/users/kinqston/documents/visual studio 2015/Projects/TowerDefense/TowerDefense/Content/Arrow.png</File>
+    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Tower.png</File>
+    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Arrow.png</File>
+    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Mob.png</File>
+    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Button.png</File>
+    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Font.spritefont</File>
   </SourceFiles>
 </SourceFileCollection>

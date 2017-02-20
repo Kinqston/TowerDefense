@@ -59,8 +59,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />
+    <Compile Include="AnimatedSprite.cs" />
+    <Compile Include="Button.cs" />
+    <Compile Include="Game.Score.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Arrow.cs" />
+    <Compile Include="GameProcess.cs" />
+    <Compile Include="Mob.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
