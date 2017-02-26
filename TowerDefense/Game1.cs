@@ -25,7 +25,18 @@ namespace Arrow
         GameState CurrentGameState = GameState.MainMenu;
         Mob Mob;
 
-        Button btnPlay;
+        Button btnClassic;
+        Button btnDethmatch;
+        Button btnRetry;
+        Button btnMenu;
+        Button btnShop;
+        Button btnShop_win_lose;
+        Button btnExit;
+        Button btnContinue;
+
+
+        Texture2D WinTexture;
+        Texture2D LoseTexture;
 
         public int score;
 
@@ -92,8 +103,32 @@ namespace Arrow
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            btnPlay = new Button(Content.Load<Texture2D>("Button"), graphics.GraphicsDevice);
-            btnPlay.setPosition(new Vector2(400, 200));
+            WinTexture = Content.Load<Texture2D>("WinTexture");
+            LoseTexture = Content.Load<Texture2D>("LoseTexture");
+
+            btnRetry = new Button(Content.Load<Texture2D>("Retry"), graphics.GraphicsDevice);
+            btnRetry.setPosition(new Vector2(550, ScreenHeigth - ScreenHeigth / 4));
+
+            btnContinue = new Button(Content.Load<Texture2D>("Continue"), graphics.GraphicsDevice);
+            btnContinue.setPosition(new Vector2(550, ScreenHeigth - ScreenHeigth / 4));
+
+            btnMenu = new Button(Content.Load<Texture2D>("Menu"), graphics.GraphicsDevice);
+            btnMenu.setPosition(new Vector2(150, ScreenHeigth-ScreenHeigth/4));         
+
+            btnShop_win_lose = new Button(Content.Load<Texture2D>("Shop"), graphics.GraphicsDevice);
+            btnShop_win_lose.setPosition(new Vector2(350, ScreenHeigth - ScreenHeigth / 4));
+
+            btnClassic = new Button(Content.Load<Texture2D>("Classic"), graphics.GraphicsDevice);
+            btnClassic.setPosition(new Vector2(ScreenWidth/2-btnClassic.texture.Width/4, 200));
+
+            btnDethmatch = new Button(Content.Load<Texture2D>("Dethmatch"), graphics.GraphicsDevice);
+            btnDethmatch.setPosition(new Vector2(ScreenWidth/2-btnDethmatch.texture.Width/4, 250));
+
+            btnShop = new Button(Content.Load<Texture2D>("Shop"), graphics.GraphicsDevice);
+            btnShop.setPosition(new Vector2(ScreenWidth / 2 - btnDethmatch.texture.Width / 4, 300));
+
+            btnExit = new Button(Content.Load<Texture2D>("Exit"), graphics.GraphicsDevice);
+            btnExit.setPosition(new Vector2(ScreenWidth / 2 - btnDethmatch.texture.Width / 4, 350));
 
             TowerTexture = Content.Load<Texture2D>("Tower");
             TowerPosition = new Vector2(ScreenWidth / 4 - TowerTexture.Width / 4, ScreenHeigth / 2 - TowerTexture.Height / 4);
@@ -116,8 +151,15 @@ namespace Arrow
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        /// 
+        public void NewGame()
         {
+            mob_vishlo = 0;
+            mobs = new List<Mob>();
+            arrows = new List<Arrow>();
+        }
+        protected override void Update(GameTime gameTime)
+        {    
             foreach (Arrow bullet in arrows)
             {
                 foreach (Mob onemob in mobs)
@@ -125,7 +167,7 @@ namespace Arrow
                     if (bullet.Rectangle.Intersects(onemob.Rectangle)&&(bullet.isVisible==true))
                     {
                         onemob.isDead = true;
-                        GameProcess.MaxScore++;
+                        GameProcess.Score++;
                         bullet.isVisible = false;
                     }
                 }
@@ -138,25 +180,92 @@ namespace Arrow
                     j--;
                 }
             }
-            if ((mobs.Count == 0) && (mob_vishlo == 10))
-            {
-                GameProcess.WinGame();
-                btnPlay.isClicked = false;
-                mob_vishlo = 0;
-            }
+           
             TouchCollection touchCollection = TouchPanel.GetState();
-            if (!GameProcess.IsGame)
+            if (!GameProcess.IsGame)                          // Нет функционала магазина
             {
-                if (btnPlay.isClicked == true)
+                if (GameProcess.IsWin)                                       //Win
                 {
-                    GameProcess = new GameProcess();
-                    GameProcess.IsGame = true;
+                    if (btnMenu.isClicked == true)
+                    {
+                        GameProcess.IsWin = false;
+                        GameProcess.ReadScore();                        
+                    }
+                    if (btnContinue.isClicked == true)
+                    {
+                        if (GameProcess.IsDethmatch)
+                        {
+                            GameProcess.Dethmatch();
+                        }
+                        else
+                        {
+                            GameProcess.Classic();
+                        }
+                    }
+                    btnMenu.Update(touchCollection);
+                    btnContinue.Update(touchCollection);
+                    btnShop_win_lose.Update(touchCollection);
                 }
-                // CurrentGameState = GameState.Game;
-                btnPlay.Update(touchCollection);
+                else
+                {
+                    if (GameProcess.IsLose)                                       //Lose
+                    {
+                        if (btnMenu.isClicked == true)
+                        {
+                            GameProcess.IsLose = false;
+                            GameProcess.ReadScore();
+                        }
+                        if (btnRetry.isClicked == true)
+                        {
+                            if (GameProcess.IsDethmatch)
+                            {
+                                GameProcess = new GameProcess();
+                                GameProcess.Dethmatch();
+                            }
+                            else
+                            {
+                                GameProcess = new GameProcess();
+                                GameProcess.Classic();  
+                            }
+                        }
+                        btnRetry.Update(touchCollection);
+                        btnMenu.Update(touchCollection);
+                        btnShop_win_lose.Update(touchCollection);
+                    }
+                    else                                                           //Меню
+                    {
+                        if (btnClassic.isClicked == true)
+                        {
+                            GameProcess = new GameProcess();
+                            GameProcess.Classic();
+                            btnMenu.isClicked = false;
+                            btnRetry.isClicked = false;
+                            btnContinue.isClicked = false;
+                        }
+                        if (btnDethmatch.isClicked == true)
+                        {
+                            GameProcess = new GameProcess();
+                            GameProcess.Dethmatch();
+                            btnRetry.isClicked = false;
+                            btnMenu.isClicked = false;
+                            btnContinue.isClicked = false;
+                        }
+                        if (btnExit.isClicked == true)
+                        {
+                            Exit();
+                        }
+                        // CurrentGameState = GameState.Game;
+                        btnClassic.Update(touchCollection);
+                        btnDethmatch.Update(touchCollection);
+                        btnShop.Update(touchCollection);
+                        btnExit.Update(touchCollection);
+                    }
+                }
             }
             else
             {
+                btnContinue.isClicked = false;
+                btnRetry.isClicked = false;
                 foreach (TouchLocation tl in touchCollection)
                 {
                     if ((tl.State == TouchLocationState.Pressed))
@@ -173,24 +282,39 @@ namespace Arrow
 
                 //Mob.Update(gameTime);
                 _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-
-
+                
                 foreach (Mob onemob in mobs)
                 {
                     onemob.Update(gameTime);
+                    if (onemob.Rectangle.X < 0)
+                    {
+                        GameProcess.LoseGame();
+                        NewGame();
+                        btnDethmatch.isClicked = false;
+                        btnClassic.isClicked = false;
+                    }
                 }
-                if ((_timer > 0.5f) && (mob_vishlo < common))
-                {
-                    //  random = Convert.ToInt32(new Random(800));
-                    _timer = 0;
-                    //  Mob.LoadContent(Content);
+                if ((_timer > GameProcess.timespawn) && (mob_vishlo < GameProcess.mobs))
+                {                
+                    _timer = 0;                  
                     Mob = new Mob(new Vector2(800, random.Next(400)));
+                    Mob.speed = GameProcess.speedMobs;
                     Mob.LoadContent(Content);
                     mobs.Add(Mob);
                     mob_vishlo++;
+                    if (GameProcess.IsDethmatch)
+                    {
+                        if (GameProcess.timespawn > 0.1f)
+                            GameProcess.timespawn = GameProcess.timespawn - 0.1f;
+                    }
                 }
-            }           
+                if ((mobs.Count == 0) && (mob_vishlo == GameProcess.mobs))
+                {
+                    GameProcess.WinGame();
+                    btnClassic.isClicked = false;
+                    NewGame();
+                }
+            }
             //foreach (Arrow onearrow in arrows)
             //{
             //    foreach (Mob onemob in mobs)
@@ -228,7 +352,7 @@ namespace Arrow
         public void Shooting()
         {
             Arrow newArrow = new Arrow(Content.Load<Texture2D>("Arrow"));
-            newArrow.ArrowVelocity = new Vector2((float)Math.Cos(TowerRotation), (float)Math.Sin(TowerRotation)) * 5f;
+            newArrow.ArrowVelocity = new Vector2((float)Math.Cos(TowerRotation), (float)Math.Sin(TowerRotation)) * GameProcess.speedArrow;
             newArrow.ArrowPosition = TowerPosition + newArrow.ArrowVelocity * 5f;
             newArrow.ArrowRotation = (float)Math.Atan2(sight.Y, sight.X);
             newArrow.isVisible = true;
@@ -243,18 +367,44 @@ namespace Arrow
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-
-
-
             if (!GameProcess.IsGame)
             {
-                btnPlay.Draw(spriteBatch);
-                Console.WriteLine(GameProcess.MaxScore);
-                spriteBatch.DrawString(font, "Score: " + GameProcess.MaxScore, new Vector2(10, 20), Color.Black);
+                if (GameProcess.IsWin)
+                {
+                    spriteBatch.Draw(WinTexture, new Vector2(0, 0), new Rectangle(0, 0, ScreenWidth, ScreenHeigth), Color.White);
+                    spriteBatch.DrawString(font, "Win", new Vector2(370, ScreenHeigth / 3), Color.Black);
+                    spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(350, ScreenHeigth / 3+20), Color.Black);
+                    spriteBatch.DrawString(font, "Total points: " + (GameProcess.MaxScore+GameProcess.Score), new Vector2(350, ScreenHeigth / 3+40), Color.Black);
+                    btnContinue.Draw(spriteBatch);
+                    btnMenu.Draw(spriteBatch);
+                    btnShop_win_lose.Draw(spriteBatch);
+                }
+                else
+                {
+                    if (GameProcess.IsLose)
+                    {
+                        spriteBatch.Draw(LoseTexture, new Vector2(0, 0), new Rectangle(0, 0, ScreenWidth, ScreenHeigth), Color.White);
+                        spriteBatch.DrawString(font, "Lose", new Vector2(365, ScreenHeigth / 3), Color.Black);
+                        spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(350, ScreenHeigth / 3 + 20), Color.Black);
+                        spriteBatch.DrawString(font, "Total points: " + (GameProcess.MaxScore + GameProcess.Score), new Vector2(350, ScreenHeigth / 3 + 40), Color.Black);
+                        btnRetry.Draw(spriteBatch);
+                        btnMenu.Draw(spriteBatch);
+                        btnShop_win_lose.Draw(spriteBatch);
+                    }
+                    else
+                    {
+                        btnClassic.Draw(spriteBatch);
+                        btnDethmatch.Draw(spriteBatch);
+                        btnShop.Draw(spriteBatch);
+                        btnExit.Draw(spriteBatch);
+                        spriteBatch.DrawString(font, "Total points: " + GameProcess.MaxScore, new Vector2(10, 20), Color.Black);
+                    }
+                }
             }
             else
-            {             
+            {
                 spriteBatch.Draw(TowerTexture, TowerPosition, null, Color.White, 0f, TowerOriginal, 1f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(10, 20), Color.Black);
                 foreach (Arrow bullet in arrows)
                 {
                     bullet.Draw(spriteBatch);
@@ -262,8 +412,9 @@ namespace Arrow
                 foreach (Mob onemob in mobs)
                 {
                     onemob.Draw(spriteBatch);
-                }               
-            }         
+                }
+            }
+      
                 //foreach (Arrow bullet in arrows)
                 //{
                 //    if (bullet.Rectangle.Intersects(onemob.Rectangle))

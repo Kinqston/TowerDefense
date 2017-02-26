@@ -18,7 +18,7 @@ namespace TowerDefense
 {
     class Button
     {
-        Texture2D texture;
+        public Texture2D texture;
         Vector2 position;
         Rectangle rectangle;
         Color colour = new Color(255, 255, 255, 255);

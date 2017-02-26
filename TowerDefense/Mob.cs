@@ -18,6 +18,7 @@ namespace TowerDefense
     class Mob : AnimatedSprite
     {
         public bool isDead;
+        public int speed;
         public Mob(Vector2 position) : base(position)
         {
             FramesPerSeconds = 10;
@@ -32,7 +33,7 @@ namespace TowerDefense
         {
             float deltaTime = (float)gametime.ElapsedGameTime.TotalSeconds;
             
-                sDirection = new Vector2(-100, 0);
+                sDirection = new Vector2(speed, 0);
                 sPosition += sDirection * deltaTime;
             
             base.Update(gametime);
