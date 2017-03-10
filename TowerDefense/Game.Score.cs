@@ -12,10 +12,39 @@ namespace TowerDefense
 		[Serializable]
 		public class ScoreItem
 		{
-			public int Value = 0;
-		}
+			public int Value = 0;                       //Classic
+            public int Hp = 1;
+            public float speed_arrow = 3f;
+            public int arrow_strenght = 1;
+            public int speed_mobs = -50;
+            public float time_spawn = 0.5f;
+            public int count_mobs = 10;
+            public int lvl_game = 1;
+            public int count_arrow = 5;
 
-		public ScoreItem Score;
+            public int Hp_hard = 1;                 //Hard
+            public int lvl_game_hard = 1;
+            public float time_spawn_hard = 0.5f;
+            public int speed_mobs_hard = -100;
+            public float speed_arrow_hard = 3f;
+            public int count_mobs_hard = 10;
+            public int count_arrows_hard = 5;
+                                                     
+            public int lvl_game_ballista= 1;                //Ballista
+            public float time_spawn_ballista = 0.5f;
+            public int speed_mobs_ballista = -50;
+            public float speed_arrow_ballista = 5.5f;
+            public int count_mobs_ballista = 20;
+            public int count_arrows_ballista = 1;
+
+            public int lvl_game_dethmatch = 1;                //Dethmatch
+            public float time_spawn_dethmatch = 2f;
+            public int speed_mobs_dethmatch = -80;
+            public float speed_arrow_dethmatch = 7f;
+            public int count_mobs_dethmatch =1000;
+            public int count_arrows_dethmatch = 10;
+        }
+        public ScoreItem Score;
 
 		// прочитать счет обоих режимов из файла
 		public ClassScoreManager ReadScores()

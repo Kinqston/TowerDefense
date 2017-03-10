@@ -19,6 +19,7 @@ namespace TowerDefense
     {
         public bool isDead;
         public int speed;
+        public int HP;
         public Mob(Vector2 position) : base(position)
         {
             FramesPerSeconds = 10;
