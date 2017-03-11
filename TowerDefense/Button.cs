@@ -27,7 +27,7 @@ namespace TowerDefense
         public Button(Texture2D newTexture, GraphicsDevice graphics)
         {
             texture = newTexture;
-            size = new Vector2(graphics.Viewport.Width / 8, graphics.Viewport.Width / 30);
+            size = new Vector2(graphics.Viewport.Width / 10, graphics.Viewport.Height/10);
         }
         bool down;
         public bool isClicked;

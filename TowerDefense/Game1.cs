@@ -28,6 +28,7 @@ namespace Arrow
         Button btnClassic;
         Button btnDethmatch;
         Button btnRetry;
+        Button btnResume;
         Button btnMenu;
         Button btnShop;
         Button btnShop_win_lose;
@@ -61,6 +62,7 @@ namespace Arrow
         private float _timer;
 
         Texture2D TowerTexture;
+        Texture2D PauseTexture;
         Rectangle TowerRectangle;
         Vector2 TowerOriginal;
         Vector2 TowerPosition;
@@ -116,9 +118,13 @@ namespace Arrow
 
             WinTexture = Content.Load<Texture2D>("WinTexture");
             LoseTexture = Content.Load<Texture2D>("LoseTexture");
+            PauseTexture = Content.Load<Texture2D>("BackgroundPause");
 
             btnPause = new Button(Content.Load<Texture2D>("Pause"), graphics.GraphicsDevice);
-            btnPause.setPosition(new Vector2(ScreenWidth-btnPause.texture.Width*2, 0));
+            btnPause.setPosition(new Vector2(ScreenWidth-btnPause.texture.Width-25, 0));
+
+            btnResume = new Button(Content.Load<Texture2D>("Resume"), graphics.GraphicsDevice);
+            
 
             btnRetry = new Button(Content.Load<Texture2D>("Retry"), graphics.GraphicsDevice);
             btnRetry.setPosition(new Vector2(550, ScreenHeigth - ScreenHeigth / 4));
@@ -298,45 +304,45 @@ namespace Arrow
                             {
                                 GameProcess.IsUpgrate = false;
                             }
-                            if ((btn1_strength.isClicked)&(GameProcess.MaxScore >= 50))
+                            if ((btn1_strength.isClicked)&(GameProcess.MaxScore >= 500))
                             {                             
-                                GameProcess.Upgrate(1,50,"strength");
-                                GameProcess.MaxScore = GameProcess.MaxScore - 50;
+                                GameProcess.Upgrate(1,500,"strength");
+                                GameProcess.MaxScore = GameProcess.MaxScore - 500;
                                 GameProcess.Arrow_strength = GameProcess.Arrow_strength + 1;
                                 UpgrateButton();                            
                             }
-                            if ((btn3_strength.isClicked) & (GameProcess.MaxScore >= 90))
+                            if ((btn3_strength.isClicked) & (GameProcess.MaxScore >= 900))
                             {
-                                GameProcess.Upgrate(3, 90, "strength");
-                                GameProcess.MaxScore = GameProcess.MaxScore - 90;
+                                GameProcess.Upgrate(3, 900, "strength");
+                                GameProcess.MaxScore = GameProcess.MaxScore - 900;
                                 GameProcess.Arrow_strength = GameProcess.Arrow_strength + 3;
                                 UpgrateButton();
                             }
-                            if ((btn5_strength.isClicked) & (GameProcess.MaxScore >= 130))
+                            if ((btn5_strength.isClicked) & (GameProcess.MaxScore >= 1300))
                             {
-                                GameProcess.Upgrate(5, 130, "strength");
-                                GameProcess.MaxScore = GameProcess.MaxScore - 130;
+                                GameProcess.Upgrate(5, 1300, "strength");
+                                GameProcess.MaxScore = GameProcess.MaxScore - 1300;
                                 GameProcess.Arrow_strength = GameProcess.Arrow_strength + 5;
                                 UpgrateButton();
                             }
-                            if ((btn1_agility.isClicked) & (GameProcess.MaxScore >= 50))
+                            if ((btn1_agility.isClicked) & (GameProcess.MaxScore >= 500))
                             {
-                                GameProcess.Upgrate(1, 50, "agility");
-                                GameProcess.MaxScore = GameProcess.MaxScore - 50;
+                                GameProcess.Upgrate(1, 500, "agility");
+                                GameProcess.MaxScore = GameProcess.MaxScore - 500;
                                 GameProcess.speedArrow = GameProcess.speedArrow + 0.1f;
                                 UpgrateButton();
                             }
-                            if ((btn3_agility.isClicked) & (GameProcess.MaxScore >= 90))
+                            if ((btn3_agility.isClicked) & (GameProcess.MaxScore >= 900))
                             {
-                                GameProcess.Upgrate(3, 90, "agility");
-                                GameProcess.MaxScore = GameProcess.MaxScore - 90;
+                                GameProcess.Upgrate(3, 900, "agility");
+                                GameProcess.MaxScore = GameProcess.MaxScore - 900;
                                 GameProcess.speedArrow = GameProcess.speedArrow + 0.3f;
                                 UpgrateButton();
                             }
-                            if ((btn5_agility.isClicked) & (GameProcess.MaxScore >= 130))
+                            if ((btn5_agility.isClicked) & (GameProcess.MaxScore >= 1300))
                             {
-                                GameProcess.Upgrate(5, 130, "agility");
-                                GameProcess.MaxScore = GameProcess.MaxScore - 130;
+                                GameProcess.Upgrate(5, 1300, "agility");
+                                GameProcess.MaxScore = GameProcess.MaxScore - 1300;
                                 GameProcess.speedArrow = GameProcess.speedArrow + 0.5f;
                                 UpgrateButton();
                             }
@@ -407,74 +413,100 @@ namespace Arrow
             }
             else
             {
-                if (GameProcess.IsPause)
+                if (GameProcess.IsPause)                                    //Пауза
                 {
+                    btnPause.isClicked = false;
+                    if (btnMenu.isClicked)
+                    {
+                        btnClassic.isClicked = false;
+                        btnHard.isClicked = false;
+                        btnBallista.isClicked = false;
+                        btnDethmatch.isClicked = false;
+                        GameProcess.IsGame = false;
+                        GameProcess.IsPause = false;
+                        GameProcess.IsLose = false;
+                        GameProcess.IsClassic = false;
+                        GameProcess.IsHard = false;
+                        GameProcess.IsBallista = false;
+                        GameProcess.IsDethmatch = false;
+                        NewGame();
 
+                    }
+                    if (btnResume.isClicked)
+                    {
+                        GameProcess.IsPause = false;
+                        btnResume.isClicked = false;
+                    }
+                    btnMenu.Update(touchCollection, gameTime);
+                    btnResume.Update(touchCollection, gameTime);
                 }
                 else
                 {
                     btnContinue.isClicked = false;
                     btnRetry.isClicked = false;
-                    foreach (TouchLocation tl in touchCollection)
+                    btnPause.Update(touchCollection, gameTime);
+                    if (btnPause.isClicked)
+                        GameProcess.IsPause = true;
+                    else
                     {
-                        if ((tl.State == TouchLocationState.Pressed))
+                        foreach (TouchLocation tl in touchCollection)
                         {
-                            sight.X = tl.Position.X - TowerPosition.X;
-                            sight.Y = tl.Position.Y - TowerPosition.Y;
-                            TowerRotation = (float)Math.Atan2(sight.Y, sight.X);
-                            Shooting();
+                            if ((tl.State == TouchLocationState.Pressed))
+                            {
+                                sight.X = tl.Position.X - TowerPosition.X;
+                                sight.Y = tl.Position.Y - TowerPosition.Y;
+                                TowerRotation = (float)Math.Atan2(sight.Y, sight.X);
+                                Shooting();
+                            }
                         }
-                    }
-                    UpdateArrow();
-                    TowerRectangle = new Rectangle((int)TowerPosition.X, (int)TowerPosition.Y, TowerTexture.Width, TowerTexture.Height);
-                    TowerOriginal = new Vector2(TowerRectangle.Width / 2, TowerRectangle.Height / 2);
+                        UpdateArrow();
+                        TowerRectangle = new Rectangle((int)TowerPosition.X, (int)TowerPosition.Y, TowerTexture.Width, TowerTexture.Height);
+                        TowerOriginal = new Vector2(TowerRectangle.Width / 2, TowerRectangle.Height / 2);
 
-                    //Mob.Update(gameTime);
-                    _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        //Mob.Update(gameTime);
+                        _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    foreach (Mob onemob in mobs)
-                    {
-                        onemob.Update(gameTime);
-                        if ((onemob.Rectangle.X < 0) || (GameProcess.countArrow == 0))
+                        foreach (Mob onemob in mobs)
                         {
-                            GameProcess.LoseGame();
-                            NewGame();
-                            btnDethmatch.isClicked = false;
+                            onemob.Update(gameTime);
+                            if ((onemob.Rectangle.X < 0) || (GameProcess.countArrow == 0))
+                            {
+                                GameProcess.LoseGame();
+                                NewGame();
+                                btnDethmatch.isClicked = false;
+                                btnClassic.isClicked = false;
+                                btnHard.isClicked = false;
+                                btnBallista.isClicked = false;
+                            }
+                        }
+                        if ((_timer > GameProcess.timespawn) && (mob_vishlo < GameProcess.mobs))
+                        {
+                            _timer = 0;
+                            Mob = new Mob(new Vector2(800, random.Next(400)));
+                            Mob.speed = GameProcess.speedMobs;
+                            Mob.HP = GameProcess.HP_mobs;
+                            Mob.LoadContent(Content);
+                            mobs.Add(Mob);
+                            mob_vishlo++;
+                            if (GameProcess.IsDethmatch)
+                            {
+                                if (GameProcess.timespawn > 0.3f)
+                                    GameProcess.timespawn = GameProcess.timespawn - 0.1f;
+                                if (mob_vishlo % 10 == 0)
+                                {
+                                    GameProcess.speedMobs -= 2;
+                                }
+                            }
+                        }
+                        if ((mobs.Count == 0) && (mob_vishlo == GameProcess.mobs))
+                        {
+                            GameProcess.WinGame();
                             btnClassic.isClicked = false;
                             btnHard.isClicked = false;
                             btnBallista.isClicked = false;
+                            NewGame();
                         }
                     }
-                    if ((_timer > GameProcess.timespawn) && (mob_vishlo < GameProcess.mobs))
-                    {
-                        _timer = 0;
-                        Mob = new Mob(new Vector2(800, random.Next(400)));
-                        Mob.speed = GameProcess.speedMobs;
-                        Mob.HP = GameProcess.HP_mobs;
-                        Mob.LoadContent(Content);
-                        mobs.Add(Mob);
-                        mob_vishlo++;
-                        if (GameProcess.IsDethmatch)
-                        {
-                            if (GameProcess.timespawn > 0.3f)
-                                GameProcess.timespawn = GameProcess.timespawn - 0.1f;
-                            if (mob_vishlo % 10 == 0)
-                            {
-                                GameProcess.speedMobs -= 2;
-                            }
-                        }
-                    }
-                    if ((mobs.Count == 0) && (mob_vishlo == GameProcess.mobs))
-                    {
-                        GameProcess.WinGame();
-                        btnClassic.isClicked = false;
-                        btnHard.isClicked = false;
-                        btnBallista.isClicked = false;
-                        NewGame();
-                    }
-                    if (btnPause.isClicked)
-                        GameProcess.IsPause = true;
-                    btnPause.Update(touchCollection, gameTime);
                 }
             }
             //foreach (Arrow onearrow in arrows)
@@ -570,8 +602,8 @@ namespace Arrow
                     {
                         if (GameProcess.IsUpgrate)
                         {
-                            spriteBatch.Draw(TowerTexture, new Vector2(100,100), null, Color.White, 0f, TowerOriginal, 1f, SpriteEffects.None, 0);
-                            spriteBatch.DrawString(font, "Upgrate", new Vector2(365, 50), Color.Black);                               
+                            spriteBatch.Draw(TowerTexture, new Vector2(100, 100), null, Color.White, 0f, TowerOriginal, 1f, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(font, "Upgrate", new Vector2(365, 50), Color.Black);
                             spriteBatch.DrawString(font, "Agility", new Vector2(300, 120), Color.Black);
                             spriteBatch.DrawString(font, "Strength", new Vector2(300, 220), Color.Black);
                             spriteBatch.DrawString(font, "Total points: " + (GameProcess.MaxScore), new Vector2(10, 20), Color.Black);
@@ -579,59 +611,64 @@ namespace Arrow
                             spriteBatch.DrawString(font, "Agility: " + GameProcess.speedArrow, new Vector2(290, 20), Color.Black);
                             btnMenu.Draw(spriteBatch);
 
-                            spriteBatch.DrawString(font, "50 gold", new Vector2(ScreenWidth / 2+25, 180), Color.Black);         //agility
-                            spriteBatch.DrawString(font, "90 gold", new Vector2(ScreenWidth / 2+125, 180), Color.Black);
-                            spriteBatch.DrawString(font, "130 gold", new Vector2(ScreenWidth / 2+225, 180), Color.Black);                                                                    
+                            spriteBatch.DrawString(font, "500 gold", new Vector2(ScreenWidth / 2 + 25, 180), Color.Black);         //agility
+                            spriteBatch.DrawString(font, "900 gold", new Vector2(ScreenWidth / 2 + 125, 180), Color.Black);
+                            spriteBatch.DrawString(font, "1300 gold", new Vector2(ScreenWidth / 2 + 225, 180), Color.Black);
                             btn1_agility.Draw(spriteBatch);
                             btn3_agility.Draw(spriteBatch);
                             btn5_agility.Draw(spriteBatch);
 
-                            spriteBatch.DrawString(font, "50 gold", new Vector2(ScreenWidth / 2 + 25, 280), Color.Black);       //strength
-                            spriteBatch.DrawString(font, "90 gold", new Vector2(ScreenWidth / 2 + 125, 280), Color.Black);
-                            spriteBatch.DrawString(font, "130 gold", new Vector2(ScreenWidth / 2 + 225, 280), Color.Black);
+                            spriteBatch.DrawString(font, "500 gold", new Vector2(ScreenWidth / 2 + 25, 280), Color.Black);       //strength
+                            spriteBatch.DrawString(font, "900 gold", new Vector2(ScreenWidth / 2 + 125, 280), Color.Black);
+                            spriteBatch.DrawString(font, "1300 gold", new Vector2(ScreenWidth / 2 + 225, 280), Color.Black);
                             btn1_strength.Draw(spriteBatch);
                             btn3_strength.Draw(spriteBatch);
                             btn5_strength.Draw(spriteBatch);
                         }
                         else
                         {
-                            if (GameProcess.IsPause)
-                            {
-
-                            }
-                            else
-                            {
-                                btnClassic.Draw(spriteBatch);
-                                btnBallista.Draw(spriteBatch);
-                                btnHard.Draw(spriteBatch);
-                                btnDethmatch.Draw(spriteBatch);
-                                btnShop.Draw(spriteBatch);
-                                btnUpgrate.Draw(spriteBatch);
-                                btnExit.Draw(spriteBatch);
-                                spriteBatch.DrawString(font, "Total points: " + GameProcess.MaxScore, new Vector2(10, 20), Color.Black);
-                            }
-                        }
+                            btnClassic.Draw(spriteBatch);
+                            btnBallista.Draw(spriteBatch);
+                            btnHard.Draw(spriteBatch);
+                            btnDethmatch.Draw(spriteBatch);
+                            btnShop.Draw(spriteBatch);
+                            btnUpgrate.Draw(spriteBatch);
+                            btnExit.Draw(spriteBatch);
+                            spriteBatch.DrawString(font, "Total points: " + GameProcess.MaxScore, new Vector2(10, 20), Color.Black);
+                        }                
                     }
                 }
             }
             else
             {
-                spriteBatch.Draw(TowerTexture, TowerPosition, null, Color.White, 0f, TowerOriginal, 1f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(10, 20), Color.Black);
-                btnPause.Draw(spriteBatch);
-                if (GameProcess.IsHard)
-                    spriteBatch.DrawString(font, "Arrows: " + GameProcess.countArrow, new Vector2(ScreenWidth/2-30, 20), Color.Black);
-                if(GameProcess.IsClassic)
-                    spriteBatch.DrawString(font, "Level: " + GameProcess.lvl_game, new Vector2(ScreenWidth / 2 - 30, 20), Color.Black);
-                if (GameProcess.IsBallista)
-                    spriteBatch.DrawString(font, "Level: " + GameProcess.lvl_game, new Vector2(ScreenWidth / 2 - 30, 20), Color.Black);
-                foreach (Arrow bullet in arrows)
+                if (GameProcess.IsPause)
                 {
-                    bullet.Draw(spriteBatch);
+                    spriteBatch.Draw(PauseTexture, new Vector2(0, 0), new Rectangle(0, 0, PauseTexture.Width, PauseTexture.Height), Color.White);
+                    spriteBatch.DrawString(font, "Pause" , new Vector2(400, 100), Color.White);
+                    btnMenu.setPosition(new Vector2(300, 150));
+                    btnResume.setPosition(new Vector2(450,150));
+                    btnResume.Draw(spriteBatch);
+                    btnMenu.Draw(spriteBatch);
                 }
-                foreach (Mob onemob in mobs)
+                else
                 {
-                    onemob.Draw(spriteBatch);
+                    spriteBatch.Draw(TowerTexture, TowerPosition, null, Color.White, 0f, TowerOriginal, 1f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(10, 20), Color.Black);
+                    btnPause.Draw(spriteBatch);
+                    if (GameProcess.IsHard)
+                        spriteBatch.DrawString(font, "Arrows: " + GameProcess.countArrow, new Vector2(ScreenWidth / 2 - 30, 20), Color.Black);
+                    if (GameProcess.IsClassic)
+                        spriteBatch.DrawString(font, "Level: " + GameProcess.lvl_game, new Vector2(ScreenWidth / 2 - 30, 20), Color.Black);
+                    if (GameProcess.IsBallista)
+                        spriteBatch.DrawString(font, "Level: " + GameProcess.lvl_game, new Vector2(ScreenWidth / 2 - 30, 20), Color.Black);
+                    foreach (Arrow bullet in arrows)
+                    {
+                        bullet.Draw(spriteBatch);
+                    }
+                    foreach (Mob onemob in mobs)
+                    {
+                        onemob.Draw(spriteBatch);
+                    }
                 }
             }     
                 //foreach (Arrow bullet in arrows)
