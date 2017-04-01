@@ -13,7 +13,6 @@
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Classic.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Exit.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Shop.png</File>
-    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/WinTexture.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/LoseTexture.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Retry.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Menu.png</File>
@@ -27,5 +26,6 @@
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Pause.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/BackgroundPause.png</File>
     <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Resume.png</File>
+    <File>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/WinTexture.png</File>
   </SourceFiles>
 </SourceFileCollection>

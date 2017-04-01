@@ -60,6 +60,7 @@ namespace Arrow
 
         private List<Mob> mobs = new List<Mob>();
         private float _timer;
+        private float _timer_arrow;
 
         Texture2D TowerTexture;
         Texture2D PauseTexture;
@@ -73,6 +74,23 @@ namespace Arrow
 
         private int ScreenWidth;
         private int ScreenHeigth;
+        private bool Create;
+        private bool Create_1;
+        private int random_spawn;
+        private Rectangle Rectangle_spawn;
+
+        public static float Dx = 1f;
+        public static float Dy = 1f;
+        private static int NominalWidth = 800;
+        private static int NominalHeight = 480;
+        private static float NominalWidthCounted;
+        private static float NominalHeightCounted;
+        private static int CurrentWidth;
+        private static int CurrentHeigth;
+        private static float deltaY = 0;
+        private static float deltaY_1 = 0;
+        public static float YTopBorder;
+        public static float YBottomBorder;
 
         public Game1()
         {
@@ -83,11 +101,38 @@ namespace Arrow
             // установка параметров экрана          
             graphics.PreferredBackBufferWidth = metric.WidthPixels;
             graphics.PreferredBackBufferHeight = metric.HeightPixels;
+            CurrentWidth = graphics.PreferredBackBufferWidth;
+            CurrentHeigth = graphics.PreferredBackBufferHeight;
             graphics.IsFullScreen = true;
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
             random = new Random();
+            UpdateScreenAttributies();
         }
 
+        public void UpdateScreenAttributies()
+        {
+            Dx = (float)CurrentWidth / NominalWidth;
+            Dy = (float)CurrentHeigth / NominalHeight;
+
+            NominalHeightCounted = CurrentHeigth / Dx;
+            NominalWidthCounted = CurrentWidth / Dx;
+
+            int check = Math.Abs(CurrentHeigth - CurrentWidth / 16 * 9);
+            if (check > 10)
+                deltaY = (float)check / 2; // недостающее расстояние до 16:9 по п оси Y (в абсолютных координатах)
+            deltaY_1 = -(CurrentWidth / 16 * 10 - CurrentWidth / 16 * 9) / 2f;
+
+            YTopBorder = -deltaY / Dx; // координата точки в левом верхнем углу (в вируальных координатах)
+            YBottomBorder = NominalHeight + (180); // координата точки в нижнем верхнем углу (в виртуальных координатах)
+        }
+        public static float AbsoluteX(float x)
+        {
+            return x * Dx;
+        }
+        public static float AbsoluteY(float y)
+        {
+            return y * Dx;
+        }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -430,7 +475,6 @@ namespace Arrow
                         GameProcess.IsBallista = false;
                         GameProcess.IsDethmatch = false;
                         NewGame();
-
                     }
                     if (btnResume.isClicked)
                     {
@@ -449,14 +493,29 @@ namespace Arrow
                         GameProcess.IsPause = true;
                     else
                     {
+                        _timer_arrow += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         foreach (TouchLocation tl in touchCollection)
                         {
-                            if ((tl.State == TouchLocationState.Pressed))
+                            if ((GameProcess.IsDethmatch)|| (GameProcess.IsClassic))
                             {
                                 sight.X = tl.Position.X - TowerPosition.X;
                                 sight.Y = tl.Position.Y - TowerPosition.Y;
                                 TowerRotation = (float)Math.Atan2(sight.Y, sight.X);
-                                Shooting();
+                                if (_timer_arrow > GameProcess.arrow_spawn)
+                                {
+                                    _timer_arrow = 0;
+                                    Shooting();
+                                }
+                            }
+                            else
+                            {
+                                if ((tl.State == TouchLocationState.Pressed))
+                                {
+                                    sight.X = tl.Position.X - TowerPosition.X;
+                                    sight.Y = tl.Position.Y - TowerPosition.Y;
+                                    TowerRotation = (float)Math.Atan2(sight.Y, sight.X);
+                                    Shooting();
+                                }
                             }
                         }
                         UpdateArrow();
@@ -469,6 +528,25 @@ namespace Arrow
                         foreach (Mob onemob in mobs)
                         {
                             onemob.Update(gameTime);
+                            if (GameProcess.IsHard)
+                            {
+                                if (onemob.sPosition.Y < 10)
+                                {
+                                    onemob.speed_y = 0;
+                                    if (random.Next(3)==2)
+                                    {
+                                        onemob.speed_y = 35;
+                                    }
+                                }
+                                if (onemob.sPosition.Y > 390)
+                                {
+                                    onemob.speed_y = 0;
+                                    if (random.Next(3) == 2)
+                                    {
+                                        onemob.speed_y = -35;
+                                    }
+                                }
+                            }
                             if ((onemob.Rectangle.X < 0) || (GameProcess.countArrow == 0))
                             {
                                 GameProcess.LoseGame();
@@ -482,7 +560,26 @@ namespace Arrow
                         if ((_timer > GameProcess.timespawn) && (mob_vishlo < GameProcess.mobs))
                         {
                             _timer = 0;
-                            Mob = new Mob(new Vector2(800, random.Next(400)));
+                            Create = false;
+                            Create_1 = true;
+                            while (Create == false)
+                                {
+                                    Create_1 = true;   
+                                    random_spawn = random.Next(400);
+                                    Rectangle_spawn = new Rectangle(800,random_spawn,10,10);
+                                    foreach (Mob onemob in mobs)
+                                    {
+                                        if (onemob.Rectangle.Intersects(Rectangle_spawn))
+                                        {
+                                            Create_1 = false;
+                                        }
+                                    }
+                                    if (Create_1 == true)
+                                    {
+                                        Create = true;
+                                    }
+                                }
+                            Mob = new Mob(new Vector2(800, random_spawn));
                             Mob.speed = GameProcess.speedMobs;
                             Mob.HP = GameProcess.HP_mobs;
                             Mob.LoadContent(Content);
@@ -495,6 +592,23 @@ namespace Arrow
                                 if (mob_vishlo % 10 == 0)
                                 {
                                     GameProcess.speedMobs -= 2;
+                                }
+                            }
+                            if (GameProcess.IsHard)
+                            {
+                                foreach (Mob onemob in mobs)
+                                {
+                                    if (random.Next(5) == 1)
+                                    {
+                                        onemob.speed_y = 35;
+                                    }
+                                    else
+                                    {
+                                        if (random.Next(5) == 5)
+                                        {
+                                            onemob.speed_y = -35;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -578,7 +692,7 @@ namespace Arrow
             {
                 if (GameProcess.IsWin)
                 {
-                    spriteBatch.Draw(WinTexture, new Vector2(0, 0), new Rectangle(0, 0, ScreenWidth, ScreenHeigth), Color.White);
+                    spriteBatch.Draw(WinTexture, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, WinTexture.Width, WinTexture.Height), Color.White,0,new Vector2(0,0),1*Dx,SpriteEffects.None,0);
                     spriteBatch.DrawString(font, "Win", new Vector2(370, ScreenHeigth / 3), Color.Black);
                     spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(350, ScreenHeigth / 3+20), Color.Black);
                     spriteBatch.DrawString(font, "Total points: " + (GameProcess.MaxScore+GameProcess.Score), new Vector2(350, ScreenHeigth / 3+40), Color.Black);

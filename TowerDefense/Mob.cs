@@ -19,6 +19,7 @@ namespace TowerDefense
     {
         public bool isDead;
         public int speed;
+        public int speed_y;
         public int HP;
         public Mob(Vector2 position) : base(position)
         {
@@ -34,7 +35,7 @@ namespace TowerDefense
         {
             float deltaTime = (float)gametime.ElapsedGameTime.TotalSeconds;
             
-                sDirection = new Vector2(speed, 0);
+                sDirection = new Vector2(speed, speed_y);
                 sPosition += sDirection * deltaTime;
             
             base.Update(gametime);

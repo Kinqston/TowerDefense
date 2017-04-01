@@ -16,7 +16,7 @@ namespace TowerDefense
 {
     abstract class AnimatedSprite
     {
-        protected Vector2 sPosition;
+        public Vector2 sPosition;
         protected Texture2D sTexture;
         private Rectangle[] sRectangle;
         private int FrameIndex;

@@ -29,6 +29,7 @@ namespace TowerDefense
         public int HP_mobs;
         public int Arrow_strength;
         public int lvl_game;
+        public double arrow_spawn;
 
         public int lvl_game_hard;             //hard
         public int mobs_hard;
@@ -63,6 +64,7 @@ namespace TowerDefense
             timespawn = ClassScoreManager.Score.time_spawn;
             mobs = ClassScoreManager.Score.count_mobs;
             lvl_game = ClassScoreManager.Score.lvl_game;
+            
             // добавление врагов
             //Enemies.Add(new Enemy(100, 300));
             //Enemies.Add(new Enemy(500, 400));
@@ -103,6 +105,7 @@ namespace TowerDefense
                 mobs = ClassScoreManager.Score.count_mobs;
                 lvl_game = ClassScoreManager.Score.lvl_game;
                 countArrow = ClassScoreManager.Score.count_arrow;
+                arrow_spawn = ClassScoreManager.Score.arrow_spawn;
             }
             if (IsHard)
             {
@@ -132,6 +135,7 @@ namespace TowerDefense
                 lvl_game = ClassScoreManager.Score.lvl_game_dethmatch;
                 speedArrow = ClassScoreManager.Score.speed_arrow_dethmatch;
                 countArrow = ClassScoreManager.Score.count_arrows_dethmatch;
+                arrow_spawn = ClassScoreManager.Score.arrow_spawn_dethmatch;
             }
             MaxScore = ClassScoreManager.Score.Value;
         }
@@ -286,6 +290,7 @@ namespace TowerDefense
             ClassScoreManager.Score.time_spawn = 0.5f;
             ClassScoreManager.Score.count_mobs = 10;
             ClassScoreManager.Score.lvl_game = 1;
+            ClassScoreManager.Score.arrow_spawn = 0.5;
 
             ClassScoreManager.Score.speed_mobs_hard = -100;             //hard
             ClassScoreManager.Score.time_spawn_hard = 1f;
@@ -294,6 +299,7 @@ namespace TowerDefense
             ClassScoreManager.Score.Hp_hard = 1;
             ClassScoreManager.Score.speed_arrow_hard = 10f;
             ClassScoreManager.Score.count_arrows_hard = 10;
+           
 
             ClassScoreManager.Score.speed_mobs_ballista = -50;             //Ballista
             ClassScoreManager.Score.time_spawn_ballista = 0.5f;
@@ -308,6 +314,7 @@ namespace TowerDefense
             ClassScoreManager.Score.lvl_game_dethmatch = 1;
             ClassScoreManager.Score.speed_arrow_dethmatch = 7f;
             ClassScoreManager.Score.count_arrows_dethmatch = 10;
+            ClassScoreManager.Score.arrow_spawn_dethmatch = 0.3;
 
             ClassScoreManager.WriteScores();
         }
@@ -324,7 +331,7 @@ namespace TowerDefense
             IsLose = false;
             IsGame = true;            
             Score = 0;
-            countArrow = 5;
+            countArrow = 20;
         }
         public void Hard()
         {

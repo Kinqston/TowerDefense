@@ -21,6 +21,7 @@ namespace TowerDefense
             public int count_mobs = 10;
             public int lvl_game = 1;
             public int count_arrow = 5;
+            public double arrow_spawn = 0.5;
 
             public int Hp_hard = 1;                 //Hard
             public int lvl_game_hard = 1;
@@ -29,7 +30,8 @@ namespace TowerDefense
             public float speed_arrow_hard = 3f;
             public int count_mobs_hard = 10;
             public int count_arrows_hard = 5;
-                                                     
+
+
             public int lvl_game_ballista= 1;                //Ballista
             public float time_spawn_ballista = 0.5f;
             public int speed_mobs_ballista = -50;
@@ -43,6 +45,7 @@ namespace TowerDefense
             public float speed_arrow_dethmatch = 7f;
             public int count_mobs_dethmatch =1000;
             public int count_arrows_dethmatch = 10;
+            public double arrow_spawn_dethmatch = 0.2;
         }
         public ScoreItem Score;
 
