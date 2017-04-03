@@ -18,6 +18,7 @@ namespace TowerDefense
     {
         public Vector2 sPosition;
         protected Texture2D sTexture;
+        public float scale;
         private Rectangle[] sRectangle;
         private int FrameIndex;
 
@@ -71,7 +72,8 @@ namespace TowerDefense
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sTexture,sPosition,sRectangle[FrameIndex],Color.White);
+           // spriteBatch.Draw(sTexture,sPosition,sRectangle[FrameIndex],Color.White);
+            spriteBatch.Draw(sTexture, sPosition, sRectangle[FrameIndex], Color.White, 0, new Vector2(0, 0), 1*scale, SpriteEffects.None, 0);
         }
     }
 }

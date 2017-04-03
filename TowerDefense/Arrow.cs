@@ -21,13 +21,14 @@ namespace Arrow
         public Vector2 ArrowVelocity;
         public Vector2 ArrowOriginalPosition;
         public float ArrowRotation;
+        public float scale;
+        public double sight;
         public bool isVisible;
-
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle((int)ArrowPosition.X, (int)ArrowPosition.Y, 0,0);
+                return new Rectangle((int)ArrowPosition.X , (int)ArrowPosition.Y, 1, 1);
             }
         }
 
@@ -38,7 +39,7 @@ namespace Arrow
         }
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(ArrowTexture, ArrowPosition, null, Color.White, ArrowRotation, Vector2.Zero, 1f, SpriteEffects.None, 0);
-        }  
+            spritebatch.Draw(ArrowTexture, ArrowPosition, null, Color.White, ArrowRotation, Vector2.Zero, 1f*scale, SpriteEffects.None, 0);           
+        }
     }
 }

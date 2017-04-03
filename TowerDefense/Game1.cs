@@ -1,3 +1,5 @@
+using Android.OS;
+using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -64,6 +66,8 @@ namespace Arrow
 
         Texture2D TowerTexture;
         Texture2D PauseTexture;
+        Texture2D Game_background;
+        Texture2D Win;
         Rectangle TowerRectangle;
         Vector2 TowerOriginal;
         Vector2 TowerPosition;
@@ -81,8 +85,10 @@ namespace Arrow
 
         public static float Dx = 1f;
         public static float Dy = 1f;
+        public static double scale_x = 1;
+        public static double scale_y = 1;
         private static int NominalWidth = 800;
-        private static int NominalHeight = 480;
+        private static int NominalHeight = 444;
         private static float NominalWidthCounted;
         private static float NominalHeightCounted;
         private static int CurrentWidth;
@@ -101,10 +107,12 @@ namespace Arrow
             // установка параметров экрана          
             graphics.PreferredBackBufferWidth = metric.WidthPixels;
             graphics.PreferredBackBufferHeight = metric.HeightPixels;
+           
             CurrentWidth = graphics.PreferredBackBufferWidth;
             CurrentHeigth = graphics.PreferredBackBufferHeight;
+            
             graphics.IsFullScreen = true;
-            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;         
             random = new Random();
             UpdateScreenAttributies();
         }
@@ -113,6 +121,9 @@ namespace Arrow
         {
             Dx = (float)CurrentWidth / NominalWidth;
             Dy = (float)CurrentHeigth / NominalHeight;
+
+            scale_x = CurrentWidth / NominalWidth;
+            scale_y = CurrentHeigth / NominalHeight;
 
             NominalHeightCounted = CurrentHeigth / Dx;
             NominalWidthCounted = CurrentWidth / Dx;
@@ -132,6 +143,14 @@ namespace Arrow
         public static float AbsoluteY(float y)
         {
             return y * Dx;
+        }
+        public static int AbsoluteScaleX(int x)
+        {
+            return (int)Math.Round(x * scale_x);
+        }
+        public static int AbsoluteScaleY(int y)
+        {
+            return (int)Math.Round(y * scale_y);
         }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -164,6 +183,8 @@ namespace Arrow
             WinTexture = Content.Load<Texture2D>("WinTexture");
             LoseTexture = Content.Load<Texture2D>("LoseTexture");
             PauseTexture = Content.Load<Texture2D>("BackgroundPause");
+            Game_background = Content.Load<Texture2D>("Game_background");
+            Win = Content.Load<Texture2D>("Win");
 
             btnPause = new Button(Content.Load<Texture2D>("Pause"), graphics.GraphicsDevice);
             btnPause.setPosition(new Vector2(ScreenWidth-btnPause.texture.Width-25, 0));
@@ -172,40 +193,40 @@ namespace Arrow
             
 
             btnRetry = new Button(Content.Load<Texture2D>("Retry"), graphics.GraphicsDevice);
-            btnRetry.setPosition(new Vector2(550, ScreenHeigth - ScreenHeigth / 4));
+            btnRetry.setPosition(new Vector2(550 , ScreenHeigth - ScreenHeigth / 4));
 
             btnContinue = new Button(Content.Load<Texture2D>("Continue"), graphics.GraphicsDevice);
-            btnContinue.setPosition(new Vector2(550, ScreenHeigth - ScreenHeigth / 4));
+            btnContinue.setPosition(new Vector2(550*Dx , ScreenHeigth - ScreenHeigth / 4));
 
             btnMenu = new Button(Content.Load<Texture2D>("Menu"), graphics.GraphicsDevice);
-            btnMenu.setPosition(new Vector2(150, ScreenHeigth-ScreenHeigth/4));         
+            btnMenu.setPosition(new Vector2(150*Dx, ScreenHeigth -ScreenHeigth/4));         
 
             btnShop_win_lose = new Button(Content.Load<Texture2D>("Shop"), graphics.GraphicsDevice);
-            btnShop_win_lose.setPosition(new Vector2(350, ScreenHeigth - ScreenHeigth / 4));
+            btnShop_win_lose.setPosition(new Vector2(350 * Dx, ScreenHeigth - ScreenHeigth / 4));
 
             btnHard = new Button(Content.Load<Texture2D>("Hard"), graphics.GraphicsDevice);
-            btnHard.setPosition(new Vector2(ScreenWidth / 2 - btnHard.texture.Width / 4-20, 150));
+            btnHard.setPosition(new Vector2(ScreenWidth / 2 - btnHard.texture.Width / 4-20, AbsoluteScaleY(150)));
 
             btnBallista = new Button(Content.Load<Texture2D>("ballista"), graphics.GraphicsDevice);
-            btnBallista.setPosition(new Vector2(ScreenWidth / 2 - btnBallista.texture.Width / 4-20, 200));
+            btnBallista.setPosition(new Vector2(ScreenWidth / 2 - btnBallista.texture.Width / 4-20, AbsoluteScaleY(200)));
 
             btnClassic = new Button(Content.Load<Texture2D>("Classic"), graphics.GraphicsDevice);
-            btnClassic.setPosition(new Vector2(ScreenWidth/2-btnClassic.texture.Width/4, 100));
+            btnClassic.setPosition(new Vector2(ScreenWidth/2-btnClassic.texture.Width/4, AbsoluteScaleY(100)));
 
             btnDethmatch = new Button(Content.Load<Texture2D>("Dethmatch"), graphics.GraphicsDevice);
-            btnDethmatch.setPosition(new Vector2(ScreenWidth/2-btnDethmatch.texture.Width/4, 250));
+            btnDethmatch.setPosition(new Vector2(ScreenWidth/2-btnDethmatch.texture.Width/4, AbsoluteScaleY(250)));
 
             btnShop = new Button(Content.Load<Texture2D>("Shop"), graphics.GraphicsDevice);
-            btnShop.setPosition(new Vector2(ScreenWidth / 2 - btnShop.texture.Width / 4, 300));
+            btnShop.setPosition(new Vector2(ScreenWidth / 2 - btnShop.texture.Width / 4, AbsoluteScaleY(300)));
 
             btnUpgrate = new Button(Content.Load<Texture2D>("Upgrate"), graphics.GraphicsDevice);
-            btnUpgrate.setPosition(new Vector2(ScreenWidth / 2 - btnUpgrate.texture.Width / 4-20, 350));
+            btnUpgrate.setPosition(new Vector2(ScreenWidth / 2 - btnUpgrate.texture.Width / 4-20, AbsoluteScaleY(350)));
 
             btnExit = new Button(Content.Load<Texture2D>("Exit"), graphics.GraphicsDevice);
-            btnExit.setPosition(new Vector2(ScreenWidth / 2 - btnExit.texture.Width / 4, 400));
+            btnExit.setPosition(new Vector2(ScreenWidth / 2 - btnExit.texture.Width / 4, AbsoluteScaleY(400)));
 
             TowerTexture = Content.Load<Texture2D>("Tower");
-            TowerPosition = new Vector2(ScreenWidth / 4 - TowerTexture.Width / 4, ScreenHeigth / 2 - TowerTexture.Height / 4);
+            TowerPosition = new Vector2(TowerTexture.Width/2, ScreenHeigth / 2);
 
             btn1_agility = new Button(Content.Load<Texture2D>("+1"), graphics.GraphicsDevice);
             btn1_agility.setPosition(new Vector2(ScreenWidth / 2, 150));
@@ -295,10 +316,12 @@ namespace Arrow
                         GameProcess.IsHard = false;
                         GameProcess.IsBallista = false;
                         GameProcess.IsDethmatch = false;
+                        NewGame();
                         GameProcess.ReadScore();                        
                     }
                     if (btnContinue.isClicked == true)
                     {
+                        NewGame();
                         if (GameProcess.IsClassic)
                             GameProcess.Classic();
                         if (GameProcess.IsHard)
@@ -397,16 +420,16 @@ namespace Arrow
                             btn1_strength.Update(touchCollection, gameTime);
                             btn3_strength.Update(touchCollection, gameTime);
                             btn5_strength.Update(touchCollection, gameTime);                           
-                            btnMenu.setPosition(new Vector2(50, ScreenHeigth - ScreenHeigth / 5));
+                            btnMenu.setPosition(new Vector2(100*Dx, ScreenHeigth - ScreenHeigth / 5));
                             btnMenu.Update(touchCollection, gameTime);
                         }
                         else
                         {
-                            btnMenu.setPosition(new Vector2(150, ScreenHeigth - ScreenHeigth / 4));
+                            btnMenu.setPosition(new Vector2(150 * Dx, ScreenHeigth - ScreenHeigth / 4));
                             btnMenu.isClicked = false;                      
                             if (btnClassic.isClicked == true)                       //меню
                             {
-                                GameProcess = new GameProcess();
+                                GameProcess = new GameProcess();                             
                                 GameProcess.Classic();
                                 btnMenu.isClicked = false;
                                 btnRetry.isClicked = false;
@@ -478,6 +501,7 @@ namespace Arrow
                     }
                     if (btnResume.isClicked)
                     {
+                        btnMenu.setPosition(new Vector2(150 * Dx, ScreenHeigth - ScreenHeigth / 4));
                         GameProcess.IsPause = false;
                         btnResume.isClicked = false;
                     }
@@ -496,7 +520,7 @@ namespace Arrow
                         _timer_arrow += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         foreach (TouchLocation tl in touchCollection)
                         {
-                            if ((GameProcess.IsDethmatch)|| (GameProcess.IsClassic))
+                            if ((GameProcess.IsDethmatch)||(GameProcess.IsClassic))
                             {
                                 sight.X = tl.Position.X - TowerPosition.X;
                                 sight.Y = tl.Position.Y - TowerPosition.Y;
@@ -564,9 +588,9 @@ namespace Arrow
                             Create_1 = true;
                             while (Create == false)
                                 {
-                                    Create_1 = true;   
-                                    random_spawn = random.Next(400);
-                                    Rectangle_spawn = new Rectangle(800,random_spawn,10,10);
+                                    Create_1 = true;
+                                    random_spawn = random.Next(AbsoluteScaleY(400));
+                                    Rectangle_spawn = new Rectangle(AbsoluteScaleX(800), random_spawn, AbsoluteScaleX(10), AbsoluteScaleY(10));
                                     foreach (Mob onemob in mobs)
                                     {
                                         if (onemob.Rectangle.Intersects(Rectangle_spawn))
@@ -579,7 +603,8 @@ namespace Arrow
                                         Create = true;
                                     }
                                 }
-                            Mob = new Mob(new Vector2(800, random_spawn));
+                            Mob = new Mob(new Vector2(800*Dx, random_spawn));
+                            Mob.scale = Dx;
                             Mob.speed = GameProcess.speedMobs;
                             Mob.HP = GameProcess.HP_mobs;
                             Mob.LoadContent(Content);
@@ -618,7 +643,7 @@ namespace Arrow
                             btnClassic.isClicked = false;
                             btnHard.isClicked = false;
                             btnBallista.isClicked = false;
-                            NewGame();
+                            //NewGame();
                         }
                     }
                 }
@@ -654,7 +679,7 @@ namespace Arrow
             foreach (Arrow OneArrow in arrows)
             {
                 OneArrow.ArrowPosition += OneArrow.ArrowVelocity;
-                if (Vector2.Distance(OneArrow.ArrowPosition, TowerPosition) > 600)
+                if (Vector2.Distance(OneArrow.ArrowPosition, TowerPosition) > AbsoluteScaleX(800))
                 {                   
                     OneArrow.isVisible = false;
                     if(GameProcess.IsHard)
@@ -673,9 +698,14 @@ namespace Arrow
         public void Shooting()
         {
             Arrow newArrow = new Arrow(Content.Load<Texture2D>("Arrow"));
-            newArrow.ArrowVelocity = new Vector2((float)Math.Cos(TowerRotation), (float)Math.Sin(TowerRotation)) * GameProcess.speedArrow;
+
+
+
+            newArrow.ArrowVelocity = new Vector2((float)Math.Cos(TowerRotation), (float)Math.Sin(TowerRotation)) * GameProcess.speedArrow*Dx;
             newArrow.ArrowPosition = TowerPosition + newArrow.ArrowVelocity;
+            newArrow.sight = Math.Atan2(sight.Y, sight.X);
             newArrow.ArrowRotation = (float)Math.Atan2(sight.Y, sight.X);
+            newArrow.scale = Dx;
             newArrow.isVisible = true;
             if (arrows.Count < GameProcess.countArrow)
                 arrows.Add(newArrow);
@@ -692,7 +722,17 @@ namespace Arrow
             {
                 if (GameProcess.IsWin)
                 {
-                    spriteBatch.Draw(WinTexture, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, WinTexture.Width, WinTexture.Height), Color.White,0,new Vector2(0,0),1*Dx,SpriteEffects.None,0);
+                    //spriteBatch.Draw(WinTexture, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, WinTexture.Width, WinTexture.Height), Color.White,0,new Vector2(0,0),1*Dx,SpriteEffects.None,0);
+                    spriteBatch.Draw(Game_background, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, WinTexture.Width, WinTexture.Height), Color.White, 0, new Vector2(0, 0), 1 * Dx, SpriteEffects.None, 0);
+                    foreach (Arrow bullet in arrows)
+                    {
+                        bullet.Draw(spriteBatch);
+                    }
+                    foreach (Mob onemob in mobs)
+                    {
+                        onemob.Draw(spriteBatch);
+                    }
+                    spriteBatch.Draw(Win, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, Win.Width, Win.Height), Color.White, 0, new Vector2(0,0), 1 * Dx, SpriteEffects.None, 0);
                     spriteBatch.DrawString(font, "Win", new Vector2(370, ScreenHeigth / 3), Color.Black);
                     spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(350, ScreenHeigth / 3+20), Color.Black);
                     spriteBatch.DrawString(font, "Total points: " + (GameProcess.MaxScore+GameProcess.Score), new Vector2(350, ScreenHeigth / 3+40), Color.Black);
@@ -704,7 +744,7 @@ namespace Arrow
                 {
                     if (GameProcess.IsLose)
                     {
-                        spriteBatch.Draw(LoseTexture, new Vector2(0, 0), new Rectangle(0, 0, ScreenWidth, ScreenHeigth), Color.White);
+                        spriteBatch.Draw(LoseTexture, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, LoseTexture.Width, LoseTexture.Height), Color.White, 0, new Vector2(0, 0), 1 * Dx, SpriteEffects.None, 0);                     
                         spriteBatch.DrawString(font, "Lose", new Vector2(365, ScreenHeigth / 3), Color.Black);
                         spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(350, ScreenHeigth / 3 + 20), Color.Black);
                         spriteBatch.DrawString(font, "Total points: " + (GameProcess.MaxScore + GameProcess.Score), new Vector2(350, ScreenHeigth / 3 + 40), Color.Black);
@@ -766,7 +806,8 @@ namespace Arrow
                 }
                 else
                 {
-                    spriteBatch.Draw(TowerTexture, TowerPosition, null, Color.White, 0f, TowerOriginal, 1f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(Game_background, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, WinTexture.Width, WinTexture.Height), Color.White, 0, new Vector2(0, 0), 1 * Dx, SpriteEffects.None, 0);
+                    // spriteBatch.Draw(TowerTexture, new Vector2(AbsoluteX(0), AbsoluteY(0)), new Rectangle(0, 0, TowerTexture.Width, TowerTexture.Height), Color.White, 0, new Vector2(0, 0), 1 * Dx, SpriteEffects.None, 0);
                     spriteBatch.DrawString(font, "Points: " + GameProcess.Score, new Vector2(10, 20), Color.Black);
                     btnPause.Draw(spriteBatch);
                     if (GameProcess.IsHard)

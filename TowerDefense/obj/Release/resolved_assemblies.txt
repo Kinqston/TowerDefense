@@ -1,0 +1,11 @@
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\TowerDefense.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\Java.Interop.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\Mono.Android.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\mscorlib.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\OpenTK-1.0.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\System.Core.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\System.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\System.Xml.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\MonoGame.Framework.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\System.Runtime.Serialization.dll
+C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Release\android\assets\System.ServiceModel.Internals.dll

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/Classic.png</SourceFile>
+  <SourceFile>C:/Users/Kinqston/documents/visual studio 2015/Projects/TowerDefense/TowerDefense/Content/Classic.png</SourceFile>
   <SourceTime>2017-02-24T03:28:21.6878875+10:00</SourceTime>
-  <DestFile>C:/Users/Kinqston/Documents/Visual Studio 2015/Projects/TowerDefense/TowerDefense/Content/bin/Android/Classic.xnb</DestFile>
-  <DestTime>2017-03-14T00:45:49.2582674+10:00</DestTime>
+  <DestFile>C:/Users/Kinqston/documents/visual studio 2015/Projects/TowerDefense/TowerDefense/Content/bin/Android/Classic.xnb</DestFile>
+  <DestTime>2017-04-03T17:46:29.4450413+10:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T16:36:08+10:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -40,5 +40,5 @@ c:\users\kinqston\documents\visual studio 2015\Projects\TowerDefense\TowerDefens
 c:\users\kinqston\documents\visual studio 2015\Projects\TowerDefense\TowerDefense\obj\Debug\android\assets\System.Xml.Linq.dll.mdb
 c:\users\kinqston\documents\visual studio 2015\Projects\TowerDefense\TowerDefense\obj\Debug\android\assets\TowerDefense.dll.mdb
 C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Debug\TowerDefense.csprojResolveAssemblyReference.cache
-C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\obj\Debug\TowerDefense.dll.mdb
-C:\Users\Kinqston\Documents\Visual Studio 2015\Projects\TowerDefense\TowerDefense\bin\Android\AnyCPU\Debug\TowerDefense.dll.mdb
+C:\Users\Kinqston\documents\visual studio 2015\Projects\TowerDefense\TowerDefense\obj\Debug\TowerDefense.dll.mdb
+C:\Users\Kinqston\documents\visual studio 2015\Projects\TowerDefense\TowerDefense\bin\Android\AnyCPU\Debug\TowerDefense.dll.mdb

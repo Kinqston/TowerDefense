@@ -136,6 +136,7 @@ namespace TowerDefense
                 speedArrow = ClassScoreManager.Score.speed_arrow_dethmatch;
                 countArrow = ClassScoreManager.Score.count_arrows_dethmatch;
                 arrow_spawn = ClassScoreManager.Score.arrow_spawn_dethmatch;
+                HP_mobs = 1;
             }
             MaxScore = ClassScoreManager.Score.Value;
         }
@@ -320,7 +321,7 @@ namespace TowerDefense
         }
         public void Classic()
         {
-            IsClassic = true;
+            IsClassic = true;          
             ReadScore();
             if (lvl_game == 0)
             {
